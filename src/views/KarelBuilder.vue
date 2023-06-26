@@ -33,7 +33,7 @@
         v-for="id in content" class="content-card"
         :key="`card-for-${id}`"
         :id="id"
-        @preview="launchPreviewModal($event)"
+        @preview="$router.push(`/${$event}`)"
         @edit="launchCustomizer($event)"
         @copy="launchCustomizer($event)"
       />
@@ -140,10 +140,6 @@ export default {
     launchCustomizer(id) {
       this.editing = true
       this.modalContent = id
-    },
-    launchPreviewModal(id) {
-      this.modalContent = id
-      this.editing = false
     },
     customizeNewContent() {
       // instead of a uuid (as we do as an edit base to eventuall save over), simply pass 'newMap' or 'newTask'
