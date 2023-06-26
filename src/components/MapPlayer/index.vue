@@ -35,11 +35,6 @@
         @taskCorrect="handleTaskCorrect"
         :id="activeTask"
       />
-      <content
-        v-else="!id"
-        :content="activeTask"
-      />
-
       <MapGraph v-else class="map-body"
         :graph="graph"
         :selected="selected"

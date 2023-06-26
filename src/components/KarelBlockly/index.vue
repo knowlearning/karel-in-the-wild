@@ -95,8 +95,10 @@ export default {
   watch: {
     injectedToolbox(n, o) {
       if (n === null || o === null) this.instantiateBlockly()
-      else this.workspaceInstance.updateToolbox(this.injectedToolbox)
-      this.updateChips()
+      else if (this.workspaceInstance) {
+        this.workspaceInstance.updateToolbox(this.injectedToolbox)
+        this.updateChips()
+      }
     },
     settings: {
       deep: true,
