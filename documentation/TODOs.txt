@@ -1,0 +1,36 @@
+TO DO
+o - Code Wireframed Home Page
+o - Agreement
+
+BUG FIXES
+x - 'Basic Toolbox' not tagged correctly on first Loading
+x - Missing "not stones present" and "not front clear"
+x - Stone Number Visibility on Editor
+x - Show Stopper on Editing Task Already in Map (Will be solved in Sharing to permanent id )
+x - (Will be resolved in data refactor) --Show Stopper on Content Save or Fork
+x - Fix Content Overflowing Out of Modal (Scrollbar)
+x - Arrow Misposition after "Task Correct" modal
+x - Modal Header
+x - Fix "New Content" saving even after we cancel out of it wo/saving.
+
+NEEDED FEATURES
+x - Data Sharing Public
+x - Turtle Icon on Browser Tab
+x - Build Map for Pila Next Week
+x - Hook up user Filters
+x - Layout the Map Editor -- Task List / Filters on Map Editor / How To Button
+x - Layout Homepage
+x - "How To" on Map Editor
+x - Allow Fork of Expert Content
+x - Add Reset Button to Task Player
+x - Put New Task / New Map Behaviour in Card
+x - Layout the Student Maps Page
+x - Update Save Version Pattern
+x - Include "Expert" Tasks and Related Behaviour
+x - Confirm on Deletion
+x - Confirm Close with Unsaved Changes
+x - Delay Before Map Complete
+
+
+MAYBE FEATURES
+x - CustmizerMode on MapCustomizer, Karel Graph
