@@ -105,15 +105,13 @@ export default {
     KarelBlocklyPlayerAndControls
   },
   props: {
-    id: {
-      type: String,
+    task: {
+      type: Object,
       required: true
     }
   },
   data() {
-    const task = copy(this.$store.getters.loadedContent()[this.id])
-
-    const { karelBlockly } = task
+    const karelBlockly = copy(this.task.karelBlockly)
     karelBlockly.settings.customizerMode = false
 
     const translationIds = this.$store.state.translationGroups[this.id]
@@ -130,7 +128,7 @@ export default {
       playing: false,
       stepSpeed: 5,
       activeScenarioIndex: 0,
-      correctScenarios: new Array(task.worlds.length).fill(null),
+      correctScenarios: new Array(this.task.worlds.length).fill(null),
     }
   },
   watch: {
@@ -184,7 +182,6 @@ export default {
     }
   },
   computed: {
-    task() { return this.$store.getters.loadedContent()[this.id] },
     blocksUsed() { return (this.karelBlockly.workspace.match(/block /g) || []).length },
     activePreWorld() {
       return this.task.worlds[this.activeScenarioIndex].preWorld

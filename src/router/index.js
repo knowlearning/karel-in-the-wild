@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import Player from '../views/Player.vue'
 import KarelPlayer from '../views/KarelPlayer.vue'
 import KarelBuilder from '../views/KarelBuilder.vue'
 import WorldFromJson from '../views/WorldFromJson.vue'
@@ -24,6 +25,10 @@ const routes = [
     path: '/world-from-json',
     name: 'WorldFromJson',
     component: WorldFromJson
+  },
+  {
+    path: '/:id',
+    component: Player
   }
 ]
 
