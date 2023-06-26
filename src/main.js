@@ -3,8 +3,9 @@ import App from './App.vue'
 import router from './router/index.js'
 import store from './store/index.js'
 import matchNavigatorLanguage from './helpers/matchNavigatorLanguage.js'
-import './main.css'
+import Player from './views/Player.vue'
 
+import './main.css'
 import 'sweetalert2/src/sweetalert2.scss'
 import './helpers/vue3DragEvents.js'
 import { browserAgent } from '@knowlearning/agents'
@@ -14,6 +15,7 @@ window.Agent = browserAgent()
 createApp(App)
   .use(store)
   .use(router)
+  .component('Player', Player)
   .mount('body')
 
 const initialLoad = async () => {

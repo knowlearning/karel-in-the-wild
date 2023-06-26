@@ -28,7 +28,8 @@ const routes = [
   },
   {
     path: '/:id',
-    component: Player
+    component: Player,
+    props: route => ({ id: route.params.id })
   }
 ]
 

@@ -30,7 +30,7 @@
     </div>
     
     <div class="content-wrapper" style="flex-grow: 1;">
-      <TaskPlayer v-if="taskIsActive && id"
+      <Player v-if="taskIsActive"
         :key="`task-player-in-map-${selected}`"
         @taskCorrect="handleTaskCorrect"
         :id="activeTask"
@@ -47,40 +47,26 @@
 
 <script>
 import MapGraph from './MapGraph/index.vue'
-import TaskPlayer from '../TaskPlayer/index.vue'
 import { mapCompleteSwal } from '../../helpers/projectSwallows.js'
 const copy = x => JSON.parse(JSON.stringify(x))
 
 export default {
-  components: { MapGraph, TaskPlayer },
+  components: { MapGraph },
   props: {
-    id: {
-      type: String,
-      required: false
-    },
     previewMode: {
       type: Boolean,
       required: false,
       default: false
     },
-    mapConfig: {
+    map: {
       type: Object,
-      required: false
+      required: true
     }
   },
   data() {
     //  TODO: always get scope from environment and load content from that id
-    let graph
-    let name
-    if (this.id) {
-      const g = this.$store.getters.content(this.id)
-      graph = g.graph
-      name = g.name
-    }
-    else {
-      graph = this.mapConfig.graph
-      name = this.mapConfig.name
-    }
+    const { graph, name } = this.map
+
     return {
       graph: copy(graph),
       name,

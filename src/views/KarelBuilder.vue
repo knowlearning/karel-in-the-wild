@@ -59,9 +59,7 @@ import {
   mapNotFoundSwal
 } from '../helpers/projectSwallows.js'
 import TaskCustomizer from '../components/BuilderComponents/TaskCustomizer/index.vue'
-import TaskPlayer from '../components/TaskPlayer/index.vue'
 import MapCustomizer from '../components/BuilderComponents/MapCustomizer.vue'
-import MapPlayer from '../components/MapPlayer/index.vue'
 
 export default {
   name: 'karel-builder',
@@ -71,9 +69,7 @@ export default {
     ContentCard,
     NewTaskOrMapCard,
     TaskCustomizer,
-    TaskPlayer,
-    MapCustomizer,
-    MapPlayer
+    MapCustomizer
   },
   data() {
     return {
@@ -89,10 +85,6 @@ export default {
         return MapCustomizer
       } else if (this.editing && (taskType ==='task' || this.modalContent === 'newTask')) {
         return TaskCustomizer
-      } else if (taskType === 'map') {
-        return MapPlayer
-      } else if (taskType === 'task') {
-        return TaskPlayer
       } else {
         console.warn('cannot compute component for modal from modalContent:', this.modalContent)
         return undefined
