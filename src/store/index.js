@@ -259,9 +259,8 @@ export default createStore({
         dispatch('saveToLocalContent', { id, type, data })
 
         // 3. save remote
-        const md = { name: data.name, id, type: TASK_TYPE }
         const content = JSON.stringify(data)
-        await Agent.upload(data.name, TASK_TYPE, content)
+        await Agent.upload(data.name, TASK_TYPE, content, id)
 
         const lang = getters.language()
         // 4. optimistically update translations in local store
@@ -276,7 +275,7 @@ export default createStore({
         commit('addTranslationGroup', { groupId: id, members } )
 
         //  5. update translations for agent (populated to store on reload)
-        const { state: assertions } = await Agent.send({ type: 'state', scope: 'assertionsv31', mutable: true })
+        const assertions = await Agent.mutate('assertionsv31')
         const makeAssertion = (path, value) => assertions[uuid()] = { path, value, ts: Date.now() }
 
         makeAssertion(`translations/${data.name}/${lang}`, name)
