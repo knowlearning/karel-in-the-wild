@@ -46,6 +46,9 @@ export default createStore({
     loading: state => () => state.loading,
     loadedContent: state => () => state.loadedContent,
     translation: state => target => {
+      // TODO: don't sidestep
+      return target
+
       // incoming 'target' can be slug (for app stuff) or raw id (for item stuff)
       const isSlug = translationSlugMap[target]
       const id = isSlug ? translationSlugMap[target]: target
@@ -133,7 +136,7 @@ export default createStore({
     addToMapIds: (state, id) => !state.mapIds.includes(id) && state.mapIds.push(id),
     addToTaskIds: (state, id) => !state.taskIds.includes(id) && state.taskIds.push(id), 
     saveToLocalContent: (state, { data, id, type }) => {
-      // action pushes optimistic save to Core
+      // action pushes optimistic save
       state.loadedContent[id] = data
       state.loadedContent = { ...state.loadedContent }
       if (type === 'map' && !state.mapIds.includes(id)) state.mapIds.push(id)
@@ -171,7 +174,7 @@ export default createStore({
       if (!neededIds.length) return
       try {
         const docs = await Promise.all(
-          neededIds.map(id => Core.download(id).then(r => r.json()))
+          neededIds.map(id => Agent.download(id).then(r => r.json()))
         )
         docs.forEach((doc, i) => {
           const id = neededIds[i]
@@ -186,6 +189,8 @@ export default createStore({
     },
 
     loadTranslations: async ({ getters, commit }) => {
+      return
+
       // assumes embedded task content loaded
       const allIds = Array.from(
         new Set([
@@ -196,12 +201,7 @@ export default createStore({
       )
       const translationTargetsForItems = await Promise.all(
         allIds.map(
-          id => Core.send({
-            type: 'state',
-            user: 'assertionsv31',
-            domain: 'internal',
-            scope: `links-${id}`
-          })
+          id => Agent.state(`links-${id}`, 'assertionsv31', 'internal')
         )
       )
       translationTargetsForItems.forEach(({state}, i) => {
@@ -221,12 +221,7 @@ export default createStore({
 
       const fetchedTranslations = await Promise.all(
         translationTargets.map(
-          id => Core.send({
-            type: 'state',
-            user: 'assertionsv31',
-            domain: 'internal',
-            scope: `translations-${id}`
-          })
+          id => Agent.state(`translations-${id}`, 'assertionsv31', 'internal')
         )
       )
       fetchedTranslations.forEach((fetchedTranslation, i) => {
@@ -266,7 +261,7 @@ export default createStore({
         // 3. save remote
         const md = { name: data.name, id, type: TASK_TYPE }
         const content = JSON.stringify(data)
-        await Core.upload(md, content)
+        await Agent.upload(data.name, TASK_TYPE, content)
 
         const lang = getters.language()
         // 4. optimistically update translations in local store
@@ -281,7 +276,7 @@ export default createStore({
         commit('addTranslationGroup', { groupId: id, members } )
 
         //  5. update translations for agent (populated to store on reload)
-        const { state: assertions } = await Core.send({ type: 'state', scope: 'assertionsv31', mutable: true })
+        const { state: assertions } = await Agent.send({ type: 'state', scope: 'assertionsv31', mutable: true })
         const makeAssertion = (path, value) => assertions[uuid()] = { path, value, ts: Date.now() }
 
         makeAssertion(`translations/${data.name}/${lang}`, name)
@@ -317,9 +312,8 @@ export default createStore({
         dispatch('saveToLocalContent', { id, type, data })
 
         // 3. save remote
-        const md = { name: data.name, id, type: MAP_TYPE }
         const content = JSON.stringify(data)
-        await Core.upload(md, content)
+        await Agent.upload(data.name, MAP_TYPE, content)
 
         const lang = getters.language()
         // 4. optimistically update translations in local store
@@ -330,7 +324,7 @@ export default createStore({
         })
 
         //  5. update translations for agent (populated to store on reload)
-        const { state: assertions } = await Core.send({ type: 'state', scope: 'assertionsv31', mutable: true })
+        const { state: assertions } = await Agent.mutate('assertionsv31')
         const makeAssertion = (path, value) => assertions[uuid()] = { path, value, ts: Date.now() }
 
         makeAssertion(`translations/${data.name}/${lang}`, name)
@@ -349,8 +343,8 @@ export default createStore({
       if (!id) return Promise.reject(new Error( t('id-not-found-or-not-of-valid-type') ))
 
       try {
-        const { metadata } = await Core.send({ type: 'metadata', id })
-        if (!metadata.type === TASK_TYPE) throw new Error( t('id-not-found-or-not-of-valid-type') )
+        const { type } = await Agent.metadata(id)
+        if (!type === TASK_TYPE) throw new Error( t('id-not-found-or-not-of-valid-type') )
 
         commit('addToTaskIds', id)
         await dispatch('loadContent')
@@ -365,8 +359,8 @@ export default createStore({
       if (!id) return Promise.reject(new Error( t('id-not-found-or-not-of-valid-type') ))
 
       try {
-        const { metadata } = await Core.send({ type: 'metadata', id })
-        if (!metadata.type === MAP_TYPE) throw new Error( t('id-not-found-or-not-of-valid-type') )
+        const { type } = await Agent.metadata(id)
+        if (!type === MAP_TYPE) throw new Error( t('id-not-found-or-not-of-valid-type') )
 
         commit('addToMapIds', id)
         await dispatch('loadContent')

@@ -5,7 +5,11 @@ import store from './store/index.js'
 import matchNavigatorLanguage from './helpers/matchNavigatorLanguage.js'
 import './main.css'
 
+import 'sweetalert2/src/sweetalert2.scss'
 import './helpers/vue3DragEvents.js'
+import { browserAgent } from '@knowlearning/agents'
+
+window.Agent = browserAgent()
 
 createApp(App)
   .use(store)
