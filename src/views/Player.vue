@@ -1,11 +1,16 @@
 <template>
-  <div v-if="content" class="wrapper">
-    <TaskPlayer
+  <div v-if="content" class="wrapper" :key="id">
+    <component
       v-if="isTask"
+      :is="persistentTaskComponent"
       :task="content"
       @taskCorrect="$emit('taskCorrect', $event)"
     />
-    <MapPlayer v-else-if="isMap" :map="content" />
+    <component
+      v-else-if="isMap"
+      :is="persistentMapComponent"
+      :map="content"
+    />
     <span v-else>Unknown type of content</span>
   </div>
   <div v-else>loading...</div>
@@ -14,12 +19,9 @@
 <script>
   import TaskPlayer from '../components/TaskPlayer/index.vue'
   import MapPlayer from '../components/MapPlayer/index.vue'
+  import { vuePersistentComponent } from '@knowlearning/agents'
 
   export default {
-    components: {
-      TaskPlayer,
-      MapPlayer
-    },
     props: {
       id: {
         type: String,
@@ -37,6 +39,14 @@
       },
       isMap() {
         return !this.isTask
+      },
+      persistentTaskComponent() {
+        console.log('TAAASK', this.content,vuePersistentComponent(TaskPlayer, this.id))
+        return vuePersistentComponent(TaskPlayer, this.id)
+      },
+      persistentMapComponent() {
+        console.log('MaaaaaP', this.content)
+        return vuePersistentComponent(MapPlayer, this.id)
       }
     },
     async created() {
