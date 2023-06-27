@@ -312,7 +312,7 @@ export default createStore({
 
         // 3. save remote
         const content = JSON.stringify(data)
-        await Agent.upload(data.name, MAP_TYPE, content)
+        await Agent.upload(data.name, MAP_TYPE, content, id)
 
         const lang = getters.language()
         // 4. optimistically update translations in local store
