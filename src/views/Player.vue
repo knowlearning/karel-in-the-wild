@@ -41,11 +41,9 @@
         return !this.isTask
       },
       persistentTaskComponent() {
-        console.log('TAAASK', this.content,vuePersistentComponent(TaskPlayer, this.id))
         return vuePersistentComponent(TaskPlayer, this.id)
       },
       persistentMapComponent() {
-        console.log('MaaaaaP', this.content)
         return vuePersistentComponent(MapPlayer, this.id)
       }
     },

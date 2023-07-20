@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@knowlearning/agents": "^0.4.12",
+    "@knowlearning/agents": "^0.5.7",
     "blockly": "^5.20210325.1",
     "core-js": "^3.31.0",
     "elementtree": "^0.1.7",
